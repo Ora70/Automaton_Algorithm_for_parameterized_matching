@@ -16,8 +16,8 @@ class Algorithm {
     long unsigned int *lastSeenT;
     void createA(int size_ab);
     void createAutomat();
-    bool compareAutomat(unsigned int i , unsigned int j);
-    bool compareAlgorithm(unsigned int i , unsigned int j);
+    bool compareAutomat(unsigned int j , unsigned int i);
+    bool compareAlgorithm(unsigned int j , unsigned int i);
 
 public:
     Algorithm(unsigned int *text, long unsigned int len_t, unsigned int *pattern, long unsigned int len_p, int size_ab);

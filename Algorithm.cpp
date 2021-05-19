@@ -35,6 +35,11 @@ void Algorithm::createA(int size_ab) {
         }
         lastSeen[letter] = j; //update the last time so far the letter was seen to be j
     }
+    /*cout<<"\n\n";
+    for (int i = 0; i < len_p; i++) {
+        cout<<a[i]<<", ";
+    }
+     cout<<"\n\n";*/
 
     delete[] lastSeen;
 
@@ -62,6 +67,12 @@ void Algorithm::createAutomat() {
             }
         }
     }
+
+    /*cout<<"\n\n";
+    for (int i = 0; i < len_p+1; i++) {
+        cout<<automat[i]<<", ";
+    }
+    cout<<"\n\n";*/
 }
 
 bool Algorithm::compareAutomat(unsigned int j, unsigned int i) {
