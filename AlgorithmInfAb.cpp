@@ -12,10 +12,9 @@ AlgorithmInfAb::AlgorithmInfAb(unsigned int *text, unsigned long len_t, unsigned
 }
 
 void AlgorithmInfAb::createA() {
-    this->a = new long unsigned int[len_p];
+    this->a.resize(len_p);
     unordered_map<unsigned int, long unsigned int> lastSeen;
-    long unsigned int j;
-    for (j = 0; j < len_p; j++) {
+    for (long unsigned int j = 0; j < len_p; j++) {
         unsigned int letter = pattern[j];
         auto key = lastSeen.find(letter); //check if letter in the map
         if (key == lastSeen.end()) { //letter not seen before
@@ -43,11 +42,11 @@ bool AlgorithmInfAb::compareAutomat(unsigned int j, unsigned int i) {
 }
 
 void AlgorithmInfAb::createAutomat() {
-    this->automat = new long unsigned int[len_p+1];
-    long unsigned int i, j;
+    this->automat.resize(len_p+1);
+    long unsigned int j;
     //fail arrow points to 0 in first
     automat[0] = automat[1] = 0;
-    for (i = 2; i < len_p+1; i++) {
+    for (long unsigned int i = 2; i < len_p+1; i++) {
         j = i - 1;
         while (true) {
             if (compareAutomat(automat[j], i-1)) {

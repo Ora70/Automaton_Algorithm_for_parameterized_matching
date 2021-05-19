@@ -13,8 +13,8 @@ class AlgorithmInfAb {
     unsigned int *pattern;
     long unsigned int len_t;
     long unsigned int len_p;
-    long unsigned int *a;
-    long unsigned int *automat;
+    vector<long unsigned int> a;
+    vector<long unsigned int> automat;
     unordered_map<unsigned int, long unsigned int> lastSeenT;
     void createA();
     void createAutomat();

@@ -28,13 +28,13 @@ int main() {
         cout << "Pattern's size " << k << endl;
 
         auto start = high_resolution_clock::now(); // Get starting timepoint
-        list<long unsigned int> matches1 = naive(text.data(), text.size(), pattern2, k, 10);
-        //list <long unsigned int> matches1 = naiveInfAB(text.data(), text.size(), pattern2, k);
+        //list<long unsigned int> matches1 = naive(text.data(), text.size(), pattern2, k, 10);
+        list <long unsigned int> matches1 = naiveInfAB(text.data(), text.size(), pattern2, k);
         auto stop = high_resolution_clock::now(); // Get ending timepoint
         auto durationNaive = duration_cast<microseconds>(stop - start);
 
-        //Algorithm *algorithm1 = new Algorithm(text.data(), text.size(), pattern2, k, 10);
-        AlgorithmInfAb *algorithm1 = new AlgorithmInfAb(text.data(), text.size(), pattern2, k);
+        Algorithm *algorithm1 = new Algorithm(text.data(), text.size(), pattern2, k, 10);
+        //AlgorithmInfAb *algorithm1 = new AlgorithmInfAb(text.data(), text.size(), pattern2, k);
 
         start = high_resolution_clock::now(); // Get starting timepoint
         list<long unsigned int> matches = algorithm1->runAlgorithm();

@@ -10,8 +10,7 @@ Algorithm::Algorithm(unsigned int *text, unsigned long len_t, unsigned int *patt
     //initialize array of letters that will hold the last position in the text where each letter was seen during scan
     // of the text. At first len_t+1 because no letter was seen yet.
     this->lastSeenT.resize(size_ab);
-    int i;
-    for (i = 0; i < size_ab; i++) {
+    for (int i = 0; i < size_ab; i++) {
         lastSeenT[i] = len_t+1;
     }
 }
@@ -21,12 +20,10 @@ Algorithm::Algorithm(unsigned int *text, unsigned long len_t, unsigned int *patt
 void Algorithm::createA(int size_ab) {
     this->a.resize(len_p);
     auto *lastSeen = new long unsigned int[size_ab]; //to remember the last position a letter was in
-    int i;
-    long unsigned int j;
-    for (i = 0; i < size_ab; i++) { //initialize last time all letters where seen to len_p+1. meaning no letter was seen
+    for (int i = 0; i < size_ab; i++) { //initialize last time all letters where seen to len_p+1. meaning no letter was seen
         lastSeen[i] = len_p+1;
     }
-    for (j = 0; j < len_p; j++) {
+    for (long unsigned int j = 0; j < len_p; j++) {
         unsigned int letter = pattern[j];
         if (lastSeen[letter] == len_p+1) { //first time the letter is seen
             a[j] = j;
@@ -35,22 +32,16 @@ void Algorithm::createA(int size_ab) {
         }
         lastSeen[letter] = j; //update the last time so far the letter was seen to be j
     }
-    /*cout<<"\n\n";
-    for (int i = 0; i < len_p; i++) {
-        cout<<a[i]<<", ";
-    }
-     cout<<"\n\n";*/
-
     delete[] lastSeen;
 
 }
 
 void Algorithm::createAutomat() {
     this->automat.resize(len_p+1);
-    long unsigned int i, j;
+    long unsigned int j;
     //fail arrow points to 0 in first
     automat[0] = automat[1] = 0;
-    for (i = 2; i < len_p+1; i++) {
+    for (long unsigned int i = 2; i < len_p+1; i++) {
         j = i - 1;
         while (true) {
             if (compareAutomat(automat[j], i-1)) {
@@ -67,12 +58,6 @@ void Algorithm::createAutomat() {
             }
         }
     }
-
-    /*cout<<"\n\n";
-    for (int i = 0; i < len_p+1; i++) {
-        cout<<automat[i]<<", ";
-    }
-    cout<<"\n\n";*/
 }
 
 bool Algorithm::compareAutomat(unsigned int j, unsigned int i) {
