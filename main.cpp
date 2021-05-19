@@ -28,9 +28,8 @@ int main() {
         cout << "Pattern's size " << k << endl;
 
         auto start = high_resolution_clock::now(); // Get starting timepoint
-        list<long unsigned int> matches1 = naive(text.data(), text.size(), pattern2,
-                                                 k, 10);
-        //list <long unsigned int> matches1 = naiveInfAB(text.data(), text.size(), pattern2, (sizeof(pattern2)/sizeof(*pattern2)));
+        //list<long unsigned int> matches1 = naive(text.data(), text.size(), pattern2, k, 10);
+        list <long unsigned int> matches1 = naiveInfAB(text.data(), text.size(), pattern2, k);
         auto stop = high_resolution_clock::now(); // Get ending timepoint
         auto durationNaive = duration_cast<microseconds>(stop - start);
 

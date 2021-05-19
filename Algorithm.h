@@ -3,6 +3,7 @@
 
 #include <list>
 #include <iostream>
+#include <vector>
 using namespace std;
 
 
@@ -11,9 +12,9 @@ class Algorithm {
     unsigned int *pattern;
     long unsigned int len_t;
     long unsigned int len_p;
-    long unsigned int *a;
-    long unsigned int *automat;
-    long unsigned int *lastSeenT;
+    vector<long unsigned int> a;
+    vector<long unsigned int> automat;
+    vector<long unsigned int> lastSeenT;
     void createA(int size_ab);
     void createAutomat();
     bool compareAutomat(unsigned int j , unsigned int i);

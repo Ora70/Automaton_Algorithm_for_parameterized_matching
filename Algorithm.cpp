@@ -9,7 +9,7 @@ Algorithm::Algorithm(unsigned int *text, unsigned long len_t, unsigned int *patt
     this->createAutomat();
     //initialize array of letters that will hold the last position in the text where each letter was seen during scan
     // of the text. At first len_t+1 because no letter was seen yet.
-    this->lastSeenT = new long unsigned int[size_ab];
+    this->lastSeenT.resize(size_ab);
     int i;
     for (i = 0; i < size_ab; i++) {
         lastSeenT[i] = len_t+1;
@@ -19,7 +19,7 @@ Algorithm::Algorithm(unsigned int *text, unsigned long len_t, unsigned int *patt
   * A in size len_p holds for each position i the biggest K<=i that the letter was in the pattern
   */
 void Algorithm::createA(int size_ab) {
-    this->a = new long unsigned int[len_p];
+    this->a.resize(len_p);
     auto *lastSeen = new long unsigned int[size_ab]; //to remember the last position a letter was in
     int i;
     long unsigned int j;
@@ -46,7 +46,7 @@ void Algorithm::createA(int size_ab) {
 }
 
 void Algorithm::createAutomat() {
-    this->automat = new long unsigned int[len_p+1];
+    this->automat.resize(len_p+1);
     long unsigned int i, j;
     //fail arrow points to 0 in first
     automat[0] = automat[1] = 0;

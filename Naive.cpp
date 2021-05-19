@@ -7,14 +7,11 @@
 list <long unsigned int> naiveInfAB(unsigned int *text, long unsigned int len_t, unsigned int *pattern, long unsigned int len_p) {
     list <long unsigned int> matches; //list where there where matches
     long unsigned int i, j;
-    //create maps to match letters in text and pattern. need 2 to make sure different letters do not get the same match
-    unordered_map<unsigned int, long unsigned int> p_match;
-    unordered_map<unsigned int, bool> t_match;
     //for every position in the text find p-match
     for (i = 0; i <= len_t-len_p; i++) {
-        //empty maps for re-use
-        p_match.clear();
-        t_match.clear();
+        //create maps to match letters in text and pattern. need 2 to make sure different letters do not get the same match
+        unordered_map<unsigned int, long unsigned int> p_match;
+        unordered_map<unsigned int, bool> t_match;
         bool match = true;
         //check for each letter if is matched
         for (j = 0; j < len_p; j++) {
