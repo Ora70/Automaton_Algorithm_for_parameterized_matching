@@ -28,27 +28,26 @@ int main() {
         cout << "Pattern's size " << k << endl;
 
         auto start = high_resolution_clock::now(); // Get starting timepoint
-        //list<long unsigned int> matches1 = naive(text.data(), text.size(), pattern2, k, 10);
-        list <long unsigned int> matches1 = naiveInfAB(text.data(), text.size(), pattern2, k);
+        list<long unsigned int> matches1 = naive(text.data(), text.size(), pattern2, k, 10);
+        //list <long unsigned int> matches1 = naiveInfAB(text.data(), text.size(), pattern2, k);
         auto stop = high_resolution_clock::now(); // Get ending timepoint
         auto durationNaive = duration_cast<microseconds>(stop - start);
 
-        Algorithm *algorithm1 = new Algorithm(text.data(), text.size(), pattern2,
-                                              k, 10);
-        //AlgorithmInfAb *algorithm1 = new AlgorithmInfAb(text.data(), text.size(), pattern2, (sizeof(pattern2)/sizeof(*pattern2)));
+        //Algorithm *algorithm1 = new Algorithm(text.data(), text.size(), pattern2, k, 10);
+        AlgorithmInfAb *algorithm1 = new AlgorithmInfAb(text.data(), text.size(), pattern2, k);
 
         start = high_resolution_clock::now(); // Get starting timepoint
         list<long unsigned int> matches = algorithm1->runAlgorithm();
-        //list <long unsigned int> matches1 = algorithm2->runAlgorithm();
+        //list <long unsigned int> matches = algorithm1->runAlgorithm();
         stop = high_resolution_clock::now(); // Get ending timepoint
         auto durationAlgorithm = duration_cast<microseconds>(stop - start);
 
-//    auto naiveTime = durationNaive.count();
-//    auto algoTime = durationAlgorithm.count();
-//    cout << "Time taken by naive: "<< naiveTime << " microseconds" << endl;
-//    cout << "Time taken by algorithm: "<< algoTime << " microseconds" << endl;
-//    cout<< "difference: "<<naiveTime - algoTime<< " microseconds, or "<<(naiveTime - algoTime)/1000000.0<<" seconds"<< endl;
-//    cout << "The algorithm is x" << (static_cast<float>(naiveTime) / algoTime) << " faster\n" << endl;
+    auto naiveTime = durationNaive.count();
+    auto algoTime = durationAlgorithm.count();
+    cout << "Time taken by naive: "<< naiveTime << " microseconds" << endl;
+    cout << "Time taken by algorithm: "<< algoTime << " microseconds" << endl;
+    cout<< "difference: "<<naiveTime - algoTime<< " microseconds, or "<<(naiveTime - algoTime)/1000000.0<<" seconds"<< endl;
+    cout << "The algorithm is x" << (static_cast<float>(naiveTime) / algoTime) << " faster\n" << endl;
 
 
         string flag = "good";

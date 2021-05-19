@@ -1,20 +1,18 @@
-//
-// Created by User on 19/05/2021.
-//
-
 #include "Naive.h"
 
 list <long unsigned int> naiveInfAB(unsigned int *text, long unsigned int len_t, unsigned int *pattern, long unsigned int len_p) {
     list <long unsigned int> matches; //list where there where matches
-    long unsigned int i, j;
+    //create maps to match letters in text and pattern. need 2 to make sure different letters do not get the same match
+    unordered_map<unsigned int, long unsigned int> p_match;
+    unordered_map<unsigned int, bool> t_match;
     //for every position in the text find p-match
-    for (i = 0; i <= len_t-len_p; i++) {
-        //create maps to match letters in text and pattern. need 2 to make sure different letters do not get the same match
-        unordered_map<unsigned int, long unsigned int> p_match;
-        unordered_map<unsigned int, bool> t_match;
+    for (long unsigned int i = 0; i <= len_t-len_p; i++) {
+        //clear maps for new use
+        p_match.clear();
+        t_match.clear();
         bool match = true;
         //check for each letter if is matched
-        for (j = 0; j < len_p; j++) {
+        for (long unsigned int j = 0; j < len_p; j++) {
             if (naiveCompareInfAB(p_match, t_match, pattern[j], text[i + j]) == false) {
                 match = false;
                 break;
@@ -43,19 +41,18 @@ bool naiveCompareInfAB(unordered_map<unsigned int, long unsigned int> &p_match, 
 
 list <long unsigned int> naive(unsigned int *text, long unsigned int len_t, unsigned int *pattern, long unsigned int len_p, int size_ab) {
     list <long unsigned int> matches; //list where there where matches
-    long unsigned int i, j;
     //create arrays to match letters in text and pattern. need 2 to make sure different letters do not get the same match
     std::vector<unsigned int> p_match(size_ab), t_match(size_ab);
 
     //for every position in the text find p-match
-    for (i = 0; i <= len_t-len_p; i++) {
+    for (long unsigned int i = 0; i <= len_t-len_p; i++) {
         //create arrays to match letters in text and pattern. need 2 to make sure different letters do not get the same match
         t_match.assign(size_ab, size_ab+1);
         p_match.assign(size_ab, size_ab+1);
 
         bool match = true;
         //check for each letter if is matched
-        for (j = 0; j < len_p; j++) {
+        for (long unsigned int j = 0; j < len_p; j++) {
             if (naiveCompare(p_match.data(), t_match.data(), pattern[j], text[i + j], size_ab) == false) {
                 match = false;
                 break;
