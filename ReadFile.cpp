@@ -1,10 +1,24 @@
-//
-// Created by User on 19/05/2021.
-//
-
 #include "ReadFile.h"
 
-vector<unsigned int> readFile(string filename) {
+using namespace std;
+
+vector<unsigned int> readNumberFile(const string& filename) {
+    vector<unsigned int> arr;
+    fstream file;
+    string word, t, q;
+    file.open(filename.c_str());
+
+    // extracting numbers from the file
+    while (file >> word)
+    {
+        unsigned num = stoul(word);
+        arr.push_back(num);
+    }
+    return arr;
+}
+
+
+vector<unsigned int> read_0_9_File(const string& filename) {
     vector<unsigned int> arr;
     // Create a text string, which is used to output the text file
     string temp;
@@ -28,7 +42,7 @@ vector<unsigned int> readFile(string filename) {
     return arr;
 }
 
-vector<unsigned int> readDNA(string filename) {
+vector<unsigned int> readDNA(const string& filename) {
     vector<unsigned int> arr;
     // Create a text string, which is used to output the text file
     string temp;
@@ -40,16 +54,20 @@ vector<unsigned int> readDNA(string filename) {
             myfile >> letter;
             switch (letter) {
                 case 'A':
-                    arr.push_back(1);
+                case 'a':
+                    arr.push_back(0);
                     break;
                 case 'C':
-                    arr.push_back(2);
+                case 'c':
+                    arr.push_back(1);
                     break;
                 case 'G':
-                    arr.push_back(3);
+                case 'g':
+                    arr.push_back(2);
                     break;
                 case 'T':
-                    arr.push_back(4);
+                case 't':
+                    arr.push_back(3);
                     break;
                 default:
                     break;
