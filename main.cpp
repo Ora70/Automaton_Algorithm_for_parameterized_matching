@@ -17,7 +17,7 @@ void testAlgorithm();
 
 
 int main() {
-    vector<unsigned int> text = readNumberFile("../numbers.txt");
+    vector<unsigned int> text = readTextFile("../text.txt");
     auto it1 = text.begin();
     while (it1 != text.end()) {
         cout<<*it1<<", ";

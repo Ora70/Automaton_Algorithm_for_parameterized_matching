@@ -10,10 +10,12 @@
 #include <list>
 #include <vector>
 #include <string>
+#include <sstream>
 using namespace std;
 
 vector<unsigned int> read_0_9_File(const string& filename);
 vector<unsigned int> readDNA(const string& filename);
 vector<unsigned int> readNumberFile(const string& filename);
+vector<unsigned int> readTextFile(const string& filename);
 
 #endif //PROJECT_READFILE_H

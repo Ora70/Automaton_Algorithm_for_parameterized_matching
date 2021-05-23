@@ -2,6 +2,21 @@
 
 using namespace std;
 
+vector<unsigned int> readTextFile(const string& filename) {
+    vector<unsigned int> arr;
+    ifstream in(filename);
+
+    ostringstream buffer;
+    buffer << in.rdbuf();
+
+    string contents(buffer.str());
+    cout<<contents<<endl;
+    for (auto &ch : contents) {
+        arr.push_back((unsigned int)ch);
+    }
+    return arr;
+}
+
 vector<unsigned int> readNumberFile(const string& filename) {
     vector<unsigned int> arr;
     fstream file;
@@ -20,7 +35,6 @@ vector<unsigned int> readNumberFile(const string& filename) {
 
 vector<unsigned int> read_0_9_File(const string& filename) {
     vector<unsigned int> arr;
-    // Create a text string, which is used to output the text file
     string temp;
 
     // Read from the text file
