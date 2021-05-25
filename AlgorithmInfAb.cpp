@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include "AlgorithmInfAb.h"
 
-AlgorithmInfAb::AlgorithmInfAb(unsigned int *text, unsigned long len_t, unsigned int *pattern, unsigned long len_p) {
+AlgorithmInfAb::AlgorithmInfAb(size_t *text, size_t len_t, size_t *pattern, size_t len_p) {
     this->pattern = pattern;
     this->text = text;
     this->len_p = len_p;
@@ -13,9 +13,9 @@ AlgorithmInfAb::AlgorithmInfAb(unsigned int *text, unsigned long len_t, unsigned
 
 void AlgorithmInfAb::createA() {
     this->a.resize(len_p);
-    unordered_map<unsigned int, long unsigned int> lastSeen;
-    for (long unsigned int j = 0; j < len_p; j++) {
-        unsigned int letter = pattern[j];
+    unordered_map<size_t, size_t> lastSeen;
+    for (size_t j = 0; j < len_p; j++) {
+        size_t letter = pattern[j];
         auto key = lastSeen.find(letter); //check if letter in the map
         if (key == lastSeen.end()) { //letter not seen before
             a[j] = j;
@@ -26,7 +26,7 @@ void AlgorithmInfAb::createA() {
     }
 }
 
-bool AlgorithmInfAb::compareAutomat(unsigned int j, unsigned int i) {
+bool AlgorithmInfAb::compareAutomat(size_t j, size_t i) {
     if (a[i] == i || i - a[i] > j) { //new letter
         if (a[j] == j) { //also a new letter
             return true;
@@ -43,11 +43,10 @@ bool AlgorithmInfAb::compareAutomat(unsigned int j, unsigned int i) {
 
 void AlgorithmInfAb::createAutomat() {
     this->automat.resize(len_p+1);
-    long unsigned int j;
     //fail arrow points to 0 in first
     automat[0] = automat[1] = 0;
     for (long unsigned int i = 2; i < len_p+1; i++) {
-        j = i - 1;
+        size_t j = i - 1;
         while (true) {
             if (compareAutomat(automat[j], i-1)) {
                 automat[i] = automat[j] + 1;
@@ -66,10 +65,10 @@ void AlgorithmInfAb::createAutomat() {
 }
 
 
-void AlgorithmInfAb::updateLastSeen(unsigned long i) {
+void AlgorithmInfAb::updateLastSeen(size_t i) {
     if (i >= len_p) {
         //check if need to remove an old letter
-        unsigned int letter = text[i - len_p];
+        size_t letter = text[i - len_p];
         if (lastSeenT[letter] == i - len_p) { //need to remove
             lastSeenT.erase(letter);
         }
@@ -77,7 +76,7 @@ void AlgorithmInfAb::updateLastSeen(unsigned long i) {
     lastSeenT[text[i]] = i; //add new letter to map
 }
 
-bool AlgorithmInfAb::compareAlgorithm(unsigned int j, unsigned int i) { // j in text. i in pattern
+bool AlgorithmInfAb::compareAlgorithm(size_t j, size_t i) { // j in text. i in pattern
     auto seenInText = lastSeenT.find(text[j]);
     //first time the letter was seen in pattern
     if (a[i] == i && (seenInText == lastSeenT.end() || seenInText->second < j - i)) {
@@ -91,9 +90,9 @@ bool AlgorithmInfAb::compareAlgorithm(unsigned int j, unsigned int i) { // j in 
     }
 }
 
-list<unsigned long> AlgorithmInfAb::runAlgorithm() {
-    list <long unsigned int> matches; //list where there are matches
-    unsigned long int j = 0, i = 0; //j position in automat. i position in text
+list<size_t> AlgorithmInfAb::runAlgorithm() {
+    list <size_t> matches; //list where there are matches
+    size_t j = 0, i = 0; //j position in automat. i position in text
     while (i <len_t) {
         if (compareAlgorithm(i, j)) {
             updateLastSeen(i);

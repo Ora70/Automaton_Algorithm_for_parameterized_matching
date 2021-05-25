@@ -9,21 +9,21 @@ using namespace std;
 
 
 class AlgorithmInfAb {
-    unsigned int *text;
-    unsigned int *pattern;
-    long unsigned int len_t;
-    long unsigned int len_p;
-    vector<long unsigned int> a;
-    vector<long unsigned int> automat;
-    unordered_map<unsigned int, long unsigned int> lastSeenT;
+    size_t *text;
+    size_t *pattern;
+    size_t len_t;
+    size_t len_p;
+    vector<size_t> a;
+    vector<size_t> automat;
+    unordered_map<size_t, size_t> lastSeenT;
     void createA();
     void createAutomat();
-    bool compareAutomat(unsigned int j , unsigned int i);
-    bool compareAlgorithm(unsigned int j , unsigned int i);
-    void updateLastSeen(long unsigned int i);
+    bool compareAutomat(size_t j , size_t i);
+    bool compareAlgorithm(size_t j , size_t i);
+    void updateLastSeen(size_t i);
 public:
-    AlgorithmInfAb(unsigned int *text, long unsigned int len_t, unsigned int *pattern, long unsigned int len_p);
-    list <long unsigned int> runAlgorithm();
+    AlgorithmInfAb(size_t *text, size_t len_t, size_t *pattern, size_t len_p);
+    list <size_t> runAlgorithm();
 };
 
 

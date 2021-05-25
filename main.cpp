@@ -17,27 +17,22 @@ void testAlgorithm();
 
 
 int main() {
-    vector<unsigned int> text = readTextFile("../text.txt");
-    auto it1 = text.begin();
-    while (it1 != text.end()) {
-        cout<<*it1<<", ";
-        it1++;
-    }
+    testAlgorithm();
 
 
     return 0;
 }
 
 void testAlgorithm() {
-    //vector<unsigned int> text = read_0_9_File("../pi.txt");
-    vector<unsigned int> text = readDNA("../SARS_CORONAVIRUS_NC_045512_sequence.fasta");
+    vector<size_t> text = read_0_9_File("../pi.txt");
+    //vector<unsigned int> text = readDNA("../SARS_CORONAVIRUS_NC_045512_sequence.fasta");
 
     /*for (int i = 35; i < 58; i++) {
         cout<<text[i];
     }*/
-    //text.insert(text.end(), text.cbegin(), text.cend());
-    //text.insert(text.end(), text.cbegin(), text.cend());
-    //text.insert(text.end(), text.cbegin(), text.cend());
+//    text.insert(text.end(), text.cbegin(), text.cend());
+//    text.insert(text.end(), text.cbegin(), text.cend());
+//    text.insert(text.end(), text.cbegin(), text.cend());
     cout<<"length of file: "<<text.size()<<endl;
     unsigned int pattern2[] = {3,0,1,0,0,0,2,3,2,1,1,2,0,3,2,1,0};
     //unsigned int pattern2[] = {3,3,3,3,3,3,3,3,3,3,3,3,3,1,0,0,0,2,3,2,1,1,2,0,3,2,1,0};
@@ -46,18 +41,18 @@ void testAlgorithm() {
         cout << "Pattern's size " << k << endl;
 
         auto start = high_resolution_clock::now(); // Get starting timepoint
-        list<long unsigned int> matches1 = naive(text.data(), text.size(), pattern2, k, 10);
-        //list <long unsigned int> matches1 = naiveInfAB(text.data(), text.size(), pattern2, k);
+        //list<size_t> matches1 = naive(text.data(), text.size(), pattern2, k, 10);
+        list <size_t> matches1 = naiveInfAB(text.data(), text.size(), pattern2, k);
         auto stop = high_resolution_clock::now(); // Get ending timepoint
         auto durationNaive = duration_cast<microseconds>(stop - start);
 
         start = high_resolution_clock::now(); // Get starting timepoint
-        Algorithm *algorithm1 = new Algorithm(text.data(), text.size(), pattern2, k, 10);
-        //AlgorithmInfAb *algorithm1 = new AlgorithmInfAb(text.data(), text.size(), pattern2, k);
+        //Algorithm *algorithm1 = new Algorithm(text.data(), text.size(), pattern2, k, 10);
+        AlgorithmInfAb *algorithm1 = new AlgorithmInfAb(text.data(), text.size(), pattern2, k);
 
 
-        list<long unsigned int> matches = algorithm1->runAlgorithm();
-        //list <long unsigned int> matches = algorithm1->runAlgorithm();
+        list<size_t> matches = algorithm1->runAlgorithm();
+        //list <size_t> matches = algorithm1->runAlgorithm();
         stop = high_resolution_clock::now(); // Get ending timepoint
         auto durationAlgorithm = duration_cast<microseconds>(stop - start);
 
@@ -69,7 +64,7 @@ void testAlgorithm() {
         cout << "The algorithm is x" << (static_cast<float>(naiveTime) / algoTime) << " faster\n" << endl;
 
 
-/*        string flag = "good";
+        string flag = "good";
         auto it1 = matches.begin();
         auto it2 = matches1.begin();
         while (it1 != matches.end() && it2 != matches1.end()) {
@@ -81,7 +76,7 @@ void testAlgorithm() {
             it1++;
             it2++;
         }
-        cout << flag << "\n\n";*/
+        cout << flag << "\n\n";
         cout << "--------------------------------" << endl;
     }
 }

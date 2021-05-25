@@ -6,11 +6,11 @@
 #include <unordered_map>
 using namespace std;
 
-list <long unsigned int> naive(unsigned int *text, long unsigned int len_t, unsigned int *pattern, long unsigned int len_p, int size_ab);
-bool naiveCompare(unsigned int *p_match, unsigned int *t_match, unsigned int p, unsigned int t, int size_ab);
+list <size_t> naive(size_t *text, size_t len_t, size_t *pattern, size_t len_p, int size_ab);
+bool naiveCompare(size_t *p_match, size_t *t_match, size_t p, size_t t, int size_ab);
 
-list <long unsigned int> naiveInfAB(unsigned int *text, long unsigned int len_t, unsigned int *pattern, long unsigned int len_p);
-bool naiveCompareInfAB(unordered_map<unsigned int, long unsigned int> &p_match, unordered_map<unsigned int, bool> &t_match, unsigned int p, unsigned int t);
+list <size_t> naiveInfAB(size_t *text, size_t len_t, size_t *pattern, size_t len_p);
+bool naiveCompareInfAB(unordered_map<size_t, size_t> &p_match, unordered_map<size_t, bool> &t_match, size_t p, size_t t);
 
 
 #endif //PROJECT_NAIVE_H

@@ -1,6 +1,6 @@
 #include "Algorithm.h"
 
-Algorithm::Algorithm(unsigned int *text, unsigned long len_t, unsigned int *pattern, unsigned long len_p, int size_ab) {
+Algorithm::Algorithm(size_t *text, size_t len_t, size_t *pattern, size_t len_p, int size_ab) {
     this->pattern = pattern;
     this->text = text;
     this->len_p = len_p;
@@ -19,12 +19,12 @@ Algorithm::Algorithm(unsigned int *text, unsigned long len_t, unsigned int *patt
   */
 void Algorithm::createA(int size_ab) {
     this->a.resize(len_p);
-    auto *lastSeen = new long unsigned int[size_ab]; //to remember the last position a letter was in
+    auto *lastSeen = new size_t[size_ab]; //to remember the last position a letter was in
     for (int i = 0; i < size_ab; i++) { //initialize last time all letters where seen to len_p+1. meaning no letter was seen
         lastSeen[i] = len_p+1;
     }
-    for (long unsigned int j = 0; j < len_p; j++) {
-        unsigned int letter = pattern[j];
+    for (size_t j = 0; j < len_p; j++) {
+        size_t letter = pattern[j];
         if (lastSeen[letter] == len_p+1) { //first time the letter is seen
             a[j] = j;
         } else {
@@ -38,11 +38,10 @@ void Algorithm::createA(int size_ab) {
 
 void Algorithm::createAutomat() {
     this->automat.resize(len_p+1);
-    long unsigned int j;
     //fail arrow points to 0 in first
     automat[0] = automat[1] = 0;
-    for (long unsigned int i = 2; i < len_p+1; i++) {
-        j = i - 1;
+    for (size_t i = 2; i < len_p+1; i++) {
+        size_t j = i - 1;
         while (true) {
             if (compareAutomat(automat[j], i-1)) {
                 automat[i] = automat[j] + 1;
@@ -60,7 +59,7 @@ void Algorithm::createAutomat() {
     }
 }
 
-bool Algorithm::compareAutomat(unsigned int j, unsigned int i) {
+bool Algorithm::compareAutomat(size_t j, size_t i) {
     if (a[i] == i || i - a[i] > j) { //new letter
         if (a[j] == j) { //also a new letter
             return true;
@@ -75,7 +74,7 @@ bool Algorithm::compareAutomat(unsigned int j, unsigned int i) {
     }
 }
 
-bool Algorithm::compareAlgorithm(unsigned int j, unsigned int i) { // j in text. i in pattern
+bool Algorithm::compareAlgorithm(size_t j, size_t i) { // j in text. i in pattern
     //first time the letter was seen in pattern
     if (a[i] == i && (lastSeenT[text[j]] == len_t + 1 || lastSeenT[text[j]] < j - i)) {
         return true;
@@ -88,9 +87,9 @@ bool Algorithm::compareAlgorithm(unsigned int j, unsigned int i) { // j in text.
 }
 
 
-list<unsigned long> Algorithm::runAlgorithm() {
-    list <long unsigned int> matches; //list where there are matches
-    unsigned long int j = 0, i = 0; //j position in automat. i position in text
+list<size_t> Algorithm::runAlgorithm() {
+    list <size_t> matches; //list where there are matches
+    size_t j = 0, i = 0; //j position in automat. i position in text
     while (i <len_t) {
         if (compareAlgorithm(i, j)) {
             lastSeenT[text[i]] = i; //update the last position that the letter text[i] was seen to be i

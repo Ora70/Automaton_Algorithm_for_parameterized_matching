@@ -10,7 +10,6 @@ vector<unsigned int> readTextFile(const string& filename) {
     buffer << in.rdbuf();
 
     string contents(buffer.str());
-    cout<<contents<<endl;
     for (auto &ch : contents) {
         arr.push_back((unsigned int)ch);
     }
