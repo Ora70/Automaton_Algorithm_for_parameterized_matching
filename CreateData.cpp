@@ -13,7 +13,6 @@ list<vector<size_t>> create_p_match(vector<size_t> original, unsigned int num_co
             match.push_back(value+shift);
         }
         p_matches.push_back(match);
-        cout<<shift<<endl;
     }
     return p_matches;
 }
