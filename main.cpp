@@ -8,6 +8,7 @@
 #include "AlgorithmInfAb.h"
 #include "Naive.h"
 #include "ReadFile.h"
+#include "CreateData.h"
 #include <chrono>
 
 using namespace std;
@@ -17,7 +18,14 @@ void testAlgorithm();
 
 
 int main() {
-    testAlgorithm();
+    vector<size_t> pattern{1,2,3,3,2,5,7,6};
+    list<vector<size_t>> p_matches = create_p_match(pattern, 3);
+    for (auto const& match : p_matches) {
+        for (auto const& element : match) {
+            cout<<element<<", ";
+        }
+        cout<<endl;
+    }
 
 
     return 0;
