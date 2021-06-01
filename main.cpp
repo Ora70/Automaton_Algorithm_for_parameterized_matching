@@ -15,29 +15,215 @@ using namespace std;
 using namespace std::chrono;
 
 void testCode();
-void analysisFileColumnNames();
-void testAlgorithm();
+void analysisFileColumnNames(const string& fileName);
+void testAlgorithm(const string& textNameStart, const string& matchPosFileNameStart);
+void testAlgorithmGivenFilenames(const string& textName, const string& patternName, const string& matchPosFileNameStart,
+                                 int size_ab);
+void testAlgorithmNumMatches(const string& textName, const string& patternName, int size_ab, const string& analysisFileName);
 void copyPosP_matchToFile(list<size_t> matches, string fileName);
+void testManyTextsNumMatches(const string& textNameStart, const string& analysisFileName);
 
 
 int main() {
-    /*vector<size_t> pattern{1,2,3,3,2,5,7,6};
-    list<vector<size_t>> p_matches = create_p_match(pattern, 20);
-    for (auto const& match : p_matches) {
-        for (auto const& element : match) {
-            cout<<element<<", ";
-        }
-        cout<<endl;
-    }*/
-    /*vector<unsigned int> pattern = readNumberFile("../testPattern.txt");
-    for (auto& it : pattern) {
-        cout << it << ", ";
-    }*/
-
-    testAlgorithm();
-
+    analysisFileColumnNames("analysisNumMatches.csv");
+    testManyTextsNumMatches("text", "analysisNumMatches.csv");
 
     return 0;
+}
+
+void testAlgorithmNumMatches(const string& textName, const string& patternName, int size_ab, const string& analysisFileName) {
+    vector<size_t> text = readNumberFile("files/"+ textName);
+    vector<size_t> pattern = readNumberFile("files/"+patternName);
+
+    //for every text file test length of pattern in different sizes
+    for (int k = 4; k <= pattern.size(); k*=2) {
+        //naive algorithm
+        auto start = high_resolution_clock::now(); // Get starting timepoint
+        size_t numMatches1 = naiveNumMatches(text.data(), text.size(), pattern.data(), k, size_ab);
+        auto stop = high_resolution_clock::now(); // Get ending timepoint
+        auto durationNaive = duration_cast<microseconds>(stop - start);
+
+        //algorithm
+        start = high_resolution_clock::now(); // Get starting timepoint
+        Algorithm *algorithm1 = new Algorithm(text.data(), text.size(), pattern.data(), k, size_ab);
+        size_t numMatches = algorithm1->runAlgorithmNumMatches();
+        stop = high_resolution_clock::now(); // Get ending timepoint
+        auto durationAlgorithm = duration_cast<microseconds>(stop - start);
+
+        //time of each algorithm
+        auto naiveTime = durationNaive.count();
+        auto algoTime = durationAlgorithm.count();
+
+        fstream fout;
+        //add info to the file
+        fout.open(analysisFileName, ios::out | ios::app);
+        //columns:Name of text file, Name of pattern file, Length of text, Length of pattern, Size of alphabet,
+        //      Time taken by naive, Time taken by algorithm, How much faster is the algorithm, Number of matches
+        fout<<textName+","<<patternName+","<<text.size()<<","<<k<<","<<size_ab<<","<<naiveTime<<","
+            <<algoTime<<","<<(static_cast<float>(naiveTime) / algoTime)<<","<<numMatches<<"\n";
+        fout.close();
+
+        //test and make sure both algorithms gave the same result
+        string flag = "good";
+        if (numMatches != numMatches1) {
+            flag == "bad";
+        }
+        if (flag == "bad") {
+            cout<<"bad. text: "<<textName<<", pattern: "<<patternName<<",pattern length: "<<endl;
+            cout << "--------------------------------" << endl;
+        }
+
+    }
+}
+
+
+void testManyTextsNumMatches(const string& textNameStart, const string& analysisFileName) {
+    for (int size_ab = 10; size_ab<=320; size_ab*=2) {
+        string textName = textNameStart + to_string(size_ab) + ".txt";
+        string patternName = "pattern" + to_string(size_ab) + ".txt";
+        testAlgorithmNumMatches(textName, patternName, size_ab, analysisFileName);
+    }
+}
+
+
+void testAlgorithm(const string& textNameStart, const string& matchPosFileNameStart) {
+    //analysisFileColumnNames();
+    for (int size_ab = 10; size_ab<=320; size_ab*=2) {
+        string textName = textNameStart + to_string(size_ab)+".txt";
+        string patternName = "pattern"+ to_string(size_ab)+".txt";
+
+        vector<size_t> text = readNumberFile("files/"+ textName);
+        vector<size_t> pattern = readNumberFile("files/"+patternName);
+
+        //for every text file test length of pattern in different sizes
+        for (int k = 4; k <= pattern.size(); k*=2) {
+            //naive algorithm
+            auto start = high_resolution_clock::now(); // Get starting timepoint
+            list<size_t> matches1 = naive(text.data(), text.size(), pattern.data(), k, size_ab);
+            auto stop = high_resolution_clock::now(); // Get ending timepoint
+            auto durationNaive = duration_cast<microseconds>(stop - start);
+
+            //algorithm
+            start = high_resolution_clock::now(); // Get starting timepoint
+            Algorithm *algorithm1 = new Algorithm(text.data(), text.size(), pattern.data(), k, size_ab);
+            list<size_t> matches = algorithm1->runAlgorithm();
+            stop = high_resolution_clock::now(); // Get ending timepoint
+            auto durationAlgorithm = duration_cast<microseconds>(stop - start);
+
+            //time of each algorithm
+            auto naiveTime = durationNaive.count();
+            auto algoTime = durationAlgorithm.count();
+
+            string matchPosFileName = matchPosFileNameStart + "ab"+to_string(size_ab)+"patternLen"+ to_string(k)+".txt";
+            fstream fout;
+            //add info to the file
+            fout.open("analysis.csv", ios::out | ios::app);
+            //columns:Name of text file, Name of pattern file, Length of text, Length of pattern, Size of alphabet,
+            //      Time taken by naive, Time taken by algorithm, How much faster is the algorithm, Number of matches,
+            //      File with matches
+            fout<<textName+","<<patternName+","<<text.size()<<","<<k<<","<<size_ab<<","<<naiveTime<<","
+                <<algoTime<<","<<(static_cast<float>(naiveTime) / algoTime)<<","<<matches.size()<<","<<matchPosFileName<<"\n";
+            fout.close();
+
+            //write list of p-matches to a file
+            copyPosP_matchToFile(matches, matchPosFileName);
+
+            //test and make sure both algorithms gave the same result
+            string flag = "good";
+            auto it1 = matches.begin();
+            auto it2 = matches1.begin();
+            while (it1 != matches.end() && it2 != matches1.end()) {
+                if (*it1 != *it2) {
+                    flag = "bad";
+                    cout << "bad\n" << "algorithm: " << *it1 << "\nnaive: " << *it2 << "\n";
+                    break;
+                }
+                it1++;
+                it2++;
+            }
+            if (flag == "bad") {
+                cout<<"bad. text: "<<textName<<", pattern: "<<patternName<<",pattern length: "<<to_string(k)<<endl;
+                cout << "--------------------------------" << endl;
+            }
+
+        }
+    }
+}
+
+void copyPosP_matchToFile(list<size_t> matches, string fileName) {
+    ofstream myfile;
+    fileName = "matchPositions/"+fileName;
+    myfile.open(fileName);
+    for (auto v : matches) {
+        myfile<<v<<" ";
+    }
+    myfile.close();
+}
+
+void testAlgorithmGivenFilenames(const string& textName, const string& patternName, const string& matchPosFileNameStart, int size_ab) {
+    vector<size_t> text = readNumberFile("files/"+ textName);
+    vector<size_t> pattern = readNumberFile("files/"+patternName);
+
+    //for every text file test length of pattern in different sizes
+    for (int k = 4; k <= pattern.size(); k*=2) {
+        //naive algorithm
+        auto start = high_resolution_clock::now(); // Get starting timepoint
+        list<size_t> matches1 = naive(text.data(), text.size(), pattern.data(), k, size_ab);
+        auto stop = high_resolution_clock::now(); // Get ending timepoint
+        auto durationNaive = duration_cast<microseconds>(stop - start);
+
+        //algorithm
+        start = high_resolution_clock::now(); // Get starting timepoint
+        Algorithm *algorithm1 = new Algorithm(text.data(), text.size(), pattern.data(), k, size_ab);
+        list<size_t> matches = algorithm1->runAlgorithm();
+        stop = high_resolution_clock::now(); // Get ending timepoint
+        auto durationAlgorithm = duration_cast<microseconds>(stop - start);
+
+        //time of each algorithm
+        auto naiveTime = durationNaive.count();
+        auto algoTime = durationAlgorithm.count();
+
+        string matchPosFileName = matchPosFileNameStart + ".txt";
+        fstream fout;
+        //add info to the file
+        fout.open("analysis.csv", ios::out | ios::app);
+        //columns:Name of text file, Name of pattern file, Length of text, Length of pattern, Size of alphabet,
+        //      Time taken by naive, Time taken by algorithm, How much faster is the algorithm, Number of matches,
+        //      File with matches
+        fout<<textName+","<<patternName+","<<text.size()<<","<<k<<","<<size_ab<<","<<naiveTime<<","
+            <<algoTime<<","<<(static_cast<float>(naiveTime) / algoTime)<<","<<matches.size()<<","<<matchPosFileName<<"\n";
+        fout.close();
+
+        //write list of p-matches to a file
+        copyPosP_matchToFile(matches, matchPosFileName);
+
+        //test and make sure both algorithms gave the same result
+        string flag = "good";
+        auto it1 = matches.begin();
+        auto it2 = matches1.begin();
+        while (it1 != matches.end() && it2 != matches1.end()) {
+            if (*it1 != *it2) {
+                flag = "bad";
+                cout << "bad\n" << "algorithm: " << *it1 << "\nnaive: " << *it2 << "\n";
+                break;
+            }
+            it1++;
+            it2++;
+        }
+        if (flag == "bad") {
+            cout<<"bad. text: "<<textName<<", pattern: "<<patternName<<",pattern length: "<<to_string(k)<<endl;
+            cout << "--------------------------------" << endl;
+        }
+
+    }
+}
+
+void analysisFileColumnNames(const string& fileName) {
+    fstream fout;
+    fout.open(fileName, ios::out | ios::app);
+    fout<<"Name of text file,"<<"Name of pattern file,"<<"Length of text,"<<"Length of pattern,"<<"Size of alphabet,"
+    <<"Time taken by naive,"<<"Time taken by algorithm,"<<"How much faster is the algorithm,"<<"Number of matches\n";
+    fout.close();
 }
 
 void testCode() {
@@ -98,87 +284,4 @@ void testCode() {
         cout << flag << "\n\n";
         cout << "--------------------------------" << endl;
     }
-}
-
-void testAlgorithm() {
-    analysisFileColumnNames();
-    for (int size_ab = 10; size_ab<=320; size_ab*=2) {
-        string textName = "text"+ to_string(size_ab)+".txt";
-        string patternName = "pattern"+ to_string(size_ab)+".txt";
-
-        vector<size_t> text = readNumberFile("files/"+ textName);
-        vector<size_t> pattern = readNumberFile("files/"+patternName);
-
-        //for every text file test length of pattern in different sizes
-        for (int k = 4; k <= pattern.size(); k*=2) {
-            //naive algorithm
-            auto start = high_resolution_clock::now(); // Get starting timepoint
-            list<size_t> matches1 = naive(text.data(), text.size(), pattern.data(), k, size_ab);
-            auto stop = high_resolution_clock::now(); // Get ending timepoint
-            auto durationNaive = duration_cast<microseconds>(stop - start);
-
-            //algorithm
-            start = high_resolution_clock::now(); // Get starting timepoint
-            Algorithm *algorithm1 = new Algorithm(text.data(), text.size(), pattern.data(), k, size_ab);
-            list<size_t> matches = algorithm1->runAlgorithm();
-            stop = high_resolution_clock::now(); // Get ending timepoint
-            auto durationAlgorithm = duration_cast<microseconds>(stop - start);
-
-            //time of each algorithm
-            auto naiveTime = durationNaive.count();
-            auto algoTime = durationAlgorithm.count();
-
-            string matchPosFileName = "ab"+to_string(size_ab)+"patternLen"+ to_string(k)+".txt";
-            fstream fout;
-            //add info to the file
-            fout.open("analysis.csv", ios::out | ios::app);
-            //columns:Name of text file, Name of pattern file, Length of text, Length of pattern, Size of alphabet,
-            //      Time taken by naive, Time taken by algorithm, How much faster is the algorithm, Number of matches,
-            //      File with matches
-            fout<<textName+","<<patternName+","<<text.size()<<","<<k<<","<<size_ab<<","<<naiveTime<<","
-                <<algoTime<<","<<(static_cast<float>(naiveTime) / algoTime)<<","<<matches.size()<<","<<matchPosFileName<<"\n";
-            fout.close();
-
-            //write list of p-matches to a file
-            copyPosP_matchToFile(matches, matchPosFileName);
-
-            //test and make sure both algorithms gave the same result
-            string flag = "good";
-            auto it1 = matches.begin();
-            auto it2 = matches1.begin();
-            while (it1 != matches.end() && it2 != matches1.end()) {
-                if (*it1 != *it2) {
-                    flag = "bad";
-                    cout << "bad\n" << "algorithm: " << *it1 << "\nnaive: " << *it2 << "\n";
-                    break;
-                }
-                it1++;
-                it2++;
-            }
-            if (flag == "bad") {
-                cout<<"bad. text: "<<textName<<", pattern: "<<patternName<<",pattern length: "<<to_string(k)<<endl;
-                cout << "--------------------------------" << endl;
-            }
-
-        }
-    }
-}
-
-void copyPosP_matchToFile(list<size_t> matches, string fileName) {
-    ofstream myfile;
-    fileName = "matchPositions/"+fileName;
-    myfile.open(fileName);
-    for (auto v : matches) {
-        myfile<<v<<" ";
-    }
-    myfile.close();
-}
-
-void writeToFile() {
-    fstream fout;
-    fout.open("analysis.csv", ios::out | ios::app);
-    fout<<"Name of text file,"<<"Name of pattern file,"<<"Length of text,"<<"Length of pattern,"<<"Size of alphabet,"
-    <<"Time taken by naive,"<<"Time taken by algorithm,"<<"How much faster is the algorithm,"<<"Number of matches,"
-    <<"File with matches\n";
-    fout.close();
 }

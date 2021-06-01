@@ -110,3 +110,26 @@ list<size_t> Algorithm::runAlgorithm() {
     }
     return matches;
 }
+
+size_t Algorithm:: runAlgorithmNumMatches() {
+    size_t numMatches = 0; //list where there are matches
+    size_t j = 0, i = 0; //j position in automat. i position in text
+    while (i <len_t) {
+        if (compareAlgorithm(i, j)) {
+            lastSeenT[text[i]] = i; //update the last position that the letter text[i] was seen to be i
+            j++;
+            i++;
+            if (j == len_p) { //reached the end of automat - found a match
+                j = automat[j];
+                numMatches+=1;
+            }
+        } else { //no match. fail arrow in automat
+            if (j == 0) { //if j == 0 than always i moves forward
+                lastSeenT[text[i]] = i; //update the last position that the letter text[i] was seen to be i
+                i++;
+            }
+            j = automat[j];
+        }
+    }
+    return numMatches;
+}
