@@ -6,7 +6,7 @@
 #include <unordered_map>
 using namespace std;
 
-list <size_t> naive(size_t *text, size_t len_t, size_t *pattern, size_t len_p, int size_ab);
+void naive(vector <size_t> &matches, size_t *text, size_t len_t, size_t *pattern, size_t len_p, int size_ab);
 size_t naiveNumMatches(size_t *text, size_t len_t, size_t *pattern, size_t len_p, int size_ab);
 bool naiveCompare(size_t *p_match, size_t *t_match, size_t p, size_t t, int size_ab);
 

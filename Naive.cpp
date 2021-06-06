@@ -39,8 +39,7 @@ bool naiveCompareInfAB(unordered_map<size_t, size_t> &p_match, unordered_map<siz
     }
 }
 
-list <size_t> naive(size_t *text, size_t len_t, size_t *pattern, size_t len_p, int size_ab) {
-    list <size_t> matches; //list where there where matches
+void naive(vector <size_t> &matches, size_t *text, size_t len_t, size_t *pattern, size_t len_p, int size_ab) {
     //create arrays to match letters in text and pattern. need 2 to make sure different letters do not get the same match
     std::vector<size_t> p_match(size_ab), t_match(size_ab);
 
@@ -62,7 +61,6 @@ list <size_t> naive(size_t *text, size_t len_t, size_t *pattern, size_t len_p, i
             matches.push_back(i);
         }
     }
-    return matches;
 }
 
 size_t naiveNumMatches(size_t *text, size_t len_t, size_t *pattern, size_t len_p, int size_ab) {

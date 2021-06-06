@@ -22,7 +22,7 @@ class Algorithm {
 
 public:
     Algorithm(size_t *text, size_t len_t, size_t *pattern, size_t len_p, int size_ab);
-    list <size_t> runAlgorithm();
+    void runAlgorithm(vector<size_t> &matches);
     size_t runAlgorithmNumMatches();
 
 };

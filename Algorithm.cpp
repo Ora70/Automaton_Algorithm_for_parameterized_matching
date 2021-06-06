@@ -87,8 +87,7 @@ bool Algorithm::compareAlgorithm(size_t j, size_t i) { // j in text. i in patter
 }
 
 
-list<size_t> Algorithm::runAlgorithm() {
-    list <size_t> matches; //list where there are matches
+void Algorithm::runAlgorithm(vector<size_t> &matches) {
     size_t j = 0, i = 0; //j position in automat. i position in text
     while (i <len_t) {
         if (compareAlgorithm(i, j)) {
@@ -106,9 +105,7 @@ list<size_t> Algorithm::runAlgorithm() {
             }
             j = automat[j];
         }
-
     }
-    return matches;
 }
 
 size_t Algorithm:: runAlgorithmNumMatches() {
