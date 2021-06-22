@@ -23,6 +23,9 @@ class Algorithm {
 public:
     Algorithm(size_t *text, size_t len_t, size_t *pattern, size_t len_p, int size_ab);
     void runAlgorithm(vector<size_t> &matches);
+    /*
+     * function was used to check the overhead of remembering the position of each match
+     */
     size_t runAlgorithmNumMatches();
 
 };
