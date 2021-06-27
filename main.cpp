@@ -119,7 +119,6 @@ void testManyTexts(const string& textNameStart, const string& analysisFileName, 
  */
 void copyPosP_matchToFile(const vector<size_t>& matches, string fileName) {
     ofstream myfile;
-    fileName = "matchPositions/"+fileName;
     myfile.open(fileName);
     for (auto v : matches) {
         myfile<<v<<" ";
